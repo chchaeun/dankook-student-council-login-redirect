@@ -1,42 +1,43 @@
-type APIMethod = () => {
+type APIMethod = (baseUrl: string) => {
   get: (path: string, params: Record<string, string>) => Promise<any>;
   post: (path: string, params: Record<string, string>) => Promise<any>;
 };
 
-const api: APIMethod = () => {
-  const BASE_URL = "http://133.186.216.173:8080";
-
+const api: APIMethod = (baseUrl: string) => {
   const options: RequestInit = {
-    mode: "cors",
     cache: "no-store",
-    credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
     },
-    redirect: "follow",
+    redirect: "manual",
     referrerPolicy: "no-referrer",
   };
 
   return {
     get: async (path: string, params = {}) => {
       const queryString = new URLSearchParams(params).toString();
-      const response = await fetch(`${BASE_URL}${path}?${queryString}`, {
+      const response = await fetch(`${baseUrl}${path}?${queryString}`, {
         method: "GET",
         ...options,
       });
 
-      return response.json();
+      return response;
     },
     post: async (path: string, data = {}) => {
-      const response = await fetch(BASE_URL + path, {
+      const response = await fetch(`${baseUrl}${path}`, {
         method: "POST",
         body: JSON.stringify(data),
         ...options,
       });
 
-      return response.json();
+      return response;
     },
   };
 };
 
-export default api;
+const danveryApi = () => {
+  const BASE_URL = "https://next.danvery.com/api";
+  return api(BASE_URL);
+};
+
+export { danveryApi };

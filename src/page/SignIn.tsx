@@ -1,13 +1,13 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import api from "./api";
+import { REDIRECT_URL, STUDENT_COUCIL_URL } from "../constant/url";
+import { danveryApi } from "../util/api";
 
 interface Params {
   clientId: string;
   redirectUri: string;
   codeChallenge: string;
   codeChallengeMethod: string;
-  scope: string;
   responseType: string;
 }
 
@@ -23,9 +23,8 @@ function SignIn() {
       clientId: searchParams.get("clientId") || "",
       redirectUri: searchParams.get("redirectUri") || "",
       codeChallenge: searchParams.get("codeChallenge") || "",
-      codeChallengeMethod: searchParams.get("codeChallengeMethod") || "",
-      scope: searchParams.get("scope") || "",
-      responseType: searchParams.get("responseType") || "",
+      codeChallengeMethod: "S256",
+      responseType: "code",
     });
   }, []);
 
@@ -42,11 +41,27 @@ function SignIn() {
 
     studentId &&
       password &&
-      api().post("/oauth/login", {
-        studentId,
-        password,
-        ...params,
-      });
+      danveryApi()
+        .post("/oauth/login", {
+          studentId,
+          password,
+          ...params,
+        })
+        .then((res) => {
+          if (res.type === "opaqueredirect") {
+            window.location.href = res.url;
+            return;
+          }
+
+          throw new Error("로그인 페이지 이동에 실패했습니다.");
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+  };
+
+  const getRedirectUrl = (path: string) => {
+    return `${STUDENT_COUCIL_URL}${path}?redirectUri=${REDIRECT_URL}/signin`;
   };
 
   return (
@@ -57,8 +72,8 @@ function SignIn() {
         <input placeholder="비밀번호" onChange={onPasswordChange} />
         <button type="submit">로그인</button>
       </form>
-      <a>회원가입</a>
-      <a>비밀번호 찾기</a>
+      <a href={getRedirectUrl("/signup/terms")}>회원가입</a>
+      <a href={getRedirectUrl("/reset/idpw")}>Forgot ID/PW?</a>
     </div>
   );
 }
