@@ -113,8 +113,14 @@ const Input = styled.input`
   border: none;
   border-radius: 10px;
   outline: none;
+
   &::placeholder {
     color: rgb(160, 160, 160);
+  }
+
+  &:focus {
+    outline: none;
+    border-radius: 10px;
   }
 `;
 

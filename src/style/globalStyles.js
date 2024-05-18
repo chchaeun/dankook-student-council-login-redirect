@@ -47,6 +47,7 @@ button {
   outline: solid 2px #0f59d9;
   border-radius: 1%;
 }
+
 `;
 
 export default GlobalStyles;

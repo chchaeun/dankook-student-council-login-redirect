@@ -63,6 +63,11 @@ const Button = styled.button<{ disabled?: boolean }>`
   border: none;
   border-radius: 15px;
   cursor: ${(p) => (p.disabled ? "default" : "pointer")};
+
+  &:focus {
+    outline: none;
+    border-radius: 15px;
+  }
 `;
 
 export { Layout, Container, Titles, Contents, Button };
