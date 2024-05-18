@@ -22,9 +22,9 @@ function SignIn() {
 
   useEffect(() => {
     setParams({
-      clientId: searchParams.get("clientId") || "",
-      redirectUri: searchParams.get("redirectUri") || "",
-      codeChallenge: searchParams.get("codeChallenge") || "",
+      clientId: searchParams.get("client_id") || "",
+      redirectUri: searchParams.get("redirect_uri") || "",
+      codeChallenge: searchParams.get("code_challenge") || "",
       codeChallengeMethod: "S256",
       responseType: "code",
     });
