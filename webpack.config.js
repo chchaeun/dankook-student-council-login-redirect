@@ -41,10 +41,7 @@ module.exports = {
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
   },
-  plugins: [
-    new HtmlWebpackPlugin({ template: "./public/index.html" }),
-    new CleanWebpackPlugin(),
-  ],
+  plugins: [new HtmlWebpackPlugin({ template: "./public/index.html" })],
   devServer: {
     port: 3000,
     historyApiFallback: true,
