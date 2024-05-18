@@ -11,6 +11,7 @@ const Layout = styled.div`
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   padding-top: 10rem;
   background: black;
   color: white;
@@ -39,6 +40,7 @@ const Contents = styled.div`
   height: 100%;
   padding-top: 80px;
   padding-inline: 20px;
+  margin-inline: -1px;
 
   background: white;
   border-radius: 1.5rem 1.5rem 0 0;

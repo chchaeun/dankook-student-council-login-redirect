@@ -8,7 +8,7 @@ import { Layout } from "./style/styledComponents";
 import { ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import GlobalStyles from "./style/globalStyles";
-import Policy from "./page/Policy";
+import Privacy from "./page/Privacy";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +20,8 @@ const router = createBrowserRouter([
     element: <Terms />,
   },
   {
-    path: "policy",
-    element: <Policy />,
+    path: "privacy",
+    element: <Privacy />,
   },
 ]);
 const rootNode = document.getElementById("root") as HTMLElement;

@@ -1,6 +1,6 @@
 type APIMethod = (baseUrl: string) => {
   get: (path: string, params: Record<string, string>) => Promise<any>;
-  post: (path: string, params: Record<string, string>) => Promise<any>;
+  post: (path: string, data: Record<string, string | null>) => Promise<any>;
 };
 
 const api: APIMethod = (baseUrl: string) => {

@@ -1,17 +1,35 @@
-import React, { ChangeEvent, FocusEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Container, Contents, Titles } from "../style/styledComponents";
 import CheckFilled from "../style/icon/CheckFilled";
 import CheckOutlined from "../style/icon/CheckOutlined";
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
+import privacyInformation from "../constant/privacyInformation";
+import { danveryApi } from "../util/api";
 
 const Terms = () => {
-  const SERVICE_NAME = "Text Me!";
-  const OPTIONAL = ["이름", "학과"];
+  const [searchParams] = useSearchParams();
+  const [urlParams] = useState({
+    clientId: searchParams.get("client_id"),
+    redirectUri: searchParams.get("redirect_uri"),
+    responseType: searchParams.get("response_type"),
+    codeChallenge: searchParams.get("code_challenge"),
+    codeChallengeMethod: searchParams.get("code_challenge_method"),
+    scope: searchParams.get("scope"),
+    studentId: searchParams.get("student_id"),
+    applicationName: searchParams.get("application_name"),
+  });
+
+  console.log(urlParams);
+
+  const OPTIONAL: string[] = [];
 
   const [totalAgree, setTotalAgree] = useState(false);
   const [requiredAgree, setRequiredAgree] = useState(false);
   const [optionalAgrees, setOptionalAgrees] = useState(
-    OPTIONAL.map((o) => ({ checked: false, value: o }))
+    OPTIONAL.length > 0
+      ? OPTIONAL.map((o) => ({ checked: false, value: o }))
+      : []
   );
 
   useEffect(() => {
@@ -65,6 +83,28 @@ const Terms = () => {
     });
   };
 
+  const agreeClick = () => {
+    const {
+      studentId,
+      clientId,
+      redirectUri,
+      codeChallenge,
+      codeChallengeMethod,
+      scope,
+      responseType,
+    } = urlParams;
+
+    danveryApi().post("/oauth/terms", {
+      studentId,
+      clientId,
+      redirectUri,
+      codeChallenge,
+      codeChallengeMethod,
+      scope,
+      responseType,
+    });
+  };
+
   return (
     <Container>
       <Titles>
@@ -94,11 +134,11 @@ const Terms = () => {
         </Section>
         <hr />
         <Section>
-          {SERVICE_NAME} 서비스 제공을 위해 회원번호와 함께 개인정보가
-          제공됩니다. 개인정보 제공항목은 동의 항목에서 확인하실 수 있습니다.
-          개인정보 제3자 제공 동의 안내는 아래의 '자세히'를 통해 확인하실 수
-          있습니다. 해당 정보는 동의 철회 혹은 서비스 탈퇴 시 지체없이
-          파기됩니다.
+          {urlParams.applicationName} 서비스 제공을 위해 회원번호와 함께
+          개인정보가 제공됩니다. 개인정보 제공항목은 동의 항목에서 확인하실 수
+          있습니다. 개인정보 제3자 제공 동의 안내는 아래의 '자세히'를 통해
+          확인하실 수 있습니다. 해당 정보는 동의 철회 혹은 서비스 탈퇴 시
+          지체없이 파기됩니다.
         </Section>
         <hr />
         <Section>
@@ -116,38 +156,53 @@ const Terms = () => {
                 tabIndex={1}
               />
               [필수] 단국대 총학생회 개인정보 제3자 제공 동의
+              <br />
             </AgreeLabel>
-            <a href="/policy" target="_blank">
+            <a
+              href={`/privacy?student_id=${urlParams.studentId}&application_name=${urlParams.applicationName}`}
+              target="_blank"
+            >
               자세히
             </a>
           </RowBetween>
-          <OptionalAgreeContainer>
-            <RowBetween>
-              [선택] 단국대 총학생회 개인정보 제3자 제공 동의
-              <a href="/policy" target="_blank">
-                자세히
-              </a>
-            </RowBetween>
-            {optionalAgrees.map((oa) => (
-              <AgreeLabel>
-                <input
-                  type="checkbox"
-                  value={oa.value}
-                  checked={oa.checked}
-                  onChange={optionalAgreeChange}
-                  tabIndex={1}
-                />
-                {oa.checked ? (
-                  <CheckFilled size={18} aria-hidden />
-                ) : (
-                  <CheckOutlined size={18} aria-hidden />
-                )}
-                {oa.value}
-              </AgreeLabel>
-            ))}
-          </OptionalAgreeContainer>
+          <RequiredPrivacy>
+            {searchParams
+              .get("scope")
+              ?.split(" ")
+              .map((info) => privacyInformation.get(info) || "")
+              .join(", ")}
+          </RequiredPrivacy>
+          {OPTIONAL.length > 0 && (
+            <OptionalAgreeContainer>
+              <RowBetween>
+                [선택] 단국대 총학생회 개인정보 제3자 제공 동의
+                <a
+                  href={`/privacy?student_id=${urlParams.studentId}&application_name=${urlParams.applicationName}`}
+                >
+                  자세히
+                </a>
+              </RowBetween>
+              {optionalAgrees?.map((oa) => (
+                <AgreeLabel>
+                  <input
+                    type="checkbox"
+                    value={oa.value}
+                    checked={oa.checked}
+                    onChange={optionalAgreeChange}
+                    tabIndex={1}
+                  />
+                  {oa.checked ? (
+                    <CheckFilled size={18} aria-hidden />
+                  ) : (
+                    <CheckOutlined size={18} aria-hidden />
+                  )}
+                  {oa.value}
+                </AgreeLabel>
+              ))}
+            </OptionalAgreeContainer>
+          )}
         </Section>
-        <Button type="button" disabled={!requiredAgree}>
+        <Button type="button" disabled={!requiredAgree} onClick={agreeClick}>
           동의하고 계속하기
         </Button>
       </Contents>
@@ -224,4 +279,9 @@ const RowBetween = styled.div`
     color: gray;
     cursor: pointer;
   }
+`;
+
+const RequiredPrivacy = styled.div`
+  margin-left: 27px;
+  color: gray;
 `;

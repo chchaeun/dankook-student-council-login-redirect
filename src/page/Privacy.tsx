@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Contents, Titles } from "../style/styledComponents";
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
 
 const Policy = () => {
-  const SERVICE_NAME = "Text Me!";
-  const USER = "kce3615@naver.com";
+  const [searchParams] = useSearchParams();
+  const [urlSearchParams] = useState({
+    studentId: searchParams.get("student_id"),
+    applicationName: searchParams.get("application_name"),
+  });
   return (
     <Container>
       <Titles>
@@ -13,18 +17,19 @@ const Policy = () => {
       </Titles>
       <Contents>
         <Section>
-          {SERVICE_NAME} 서비스의 이용자 식별, 회원관리 및 서비스 제공을
-          목적으로 회원번호와 함께 {USER} 님의 개인정보를 제공합니다. 해당
-          정보는 동의를 철회하거나 서비스를 탈퇴할 시 즉시 삭제 됩니다. 이용자는
-          아래 동의를 거부할 권리가 있으며, 필수 항목에 대한 동의를 거부하면
-          서비스 이용이 제한될 수 있습니다. 선택 항목에 대한 동의를 거부하면
-          특정 서비스 이용에 제한이 있을 수 있습니다.
+          {urlSearchParams.applicationName} 서비스의 이용자 식별, 회원관리 및
+          서비스 제공을 목적으로 회원번호와 함께 {urlSearchParams.studentId}
+          @dankook.ac.kr 님의 개인정보를 제공합니다. 해당 정보는 동의를
+          철회하거나 서비스를 탈퇴할 시 즉시 삭제 됩니다. 이용자는 아래 동의를
+          거부할 권리가 있으며, 필수 항목에 대한 동의를 거부하면 서비스 이용이
+          제한될 수 있습니다. 선택 항목에 대한 동의를 거부하면 특정 서비스
+          이용에 제한이 있을 수 있습니다.
         </Section>
         <hr />
         <Section>
           <div>
             <h3>제공받는 자</h3>
-            <span>{SERVICE_NAME}</span>
+            <span>{urlSearchParams.applicationName}</span>
           </div>
         </Section>
         <hr />
@@ -40,7 +45,8 @@ const Policy = () => {
           <div>
             <h4>제공 목적</h4>
             <span>
-              {SERVICE_NAME} 서비스 내 이용자 식별, 회원관리 및 서비스 제공
+              {urlSearchParams.applicationName} 서비스 내 이용자 식별, 회원관리
+              및 서비스 제공
             </span>
           </div>
           <div>
