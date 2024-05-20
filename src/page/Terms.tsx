@@ -20,8 +20,6 @@ const Terms = () => {
     applicationName: searchParams.get("application_name"),
   });
 
-  console.log(urlParams);
-
   const OPTIONAL: string[] = [];
 
   const [totalAgree, setTotalAgree] = useState(false);
@@ -94,15 +92,29 @@ const Terms = () => {
       responseType,
     } = urlParams;
 
-    danveryApi().post("/oauth/terms", {
-      studentId,
-      clientId,
-      redirectUri,
-      codeChallenge,
-      codeChallengeMethod,
-      scope,
-      responseType,
-    });
+    danveryApi()
+      .post("/oauth/terms", {
+        studentId,
+        clientId,
+        redirectUri,
+        codeChallenge,
+        codeChallengeMethod,
+        scope,
+        responseType,
+      })
+      .then((res) => {
+        const { redirectUri } = res;
+
+        if (redirectUri) {
+          window.location.href = redirectUri;
+          return;
+        }
+
+        throw new Error("로그인 페이지 이동에 실패했습니다.");
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   return (
@@ -166,11 +178,11 @@ const Terms = () => {
             </a>
           </RowBetween>
           <RequiredPrivacy>
-            {searchParams
-              .get("scope")
+            {urlParams.scope
               ?.split(" ")
               .map((info) => privacyInformation.get(info) || "")
-              .join(", ")}
+              .join(", ")
+              .slice(0, -2)}
           </RequiredPrivacy>
           {OPTIONAL.length > 0 && (
             <OptionalAgreeContainer>
