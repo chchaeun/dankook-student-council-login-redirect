@@ -50,8 +50,10 @@ function SignIn() {
           ...params,
         })
         .then((res) => {
-          if (res.type === "opaqueredirect") {
-            window.location.href = res.url;
+          const { redirectUri } = res;
+
+          if (redirectUri) {
+            window.location.href = redirectUri;
             return;
           }
 
