@@ -21,7 +21,7 @@ const api: APIMethod = (baseUrl: string) => {
         ...options,
       });
 
-      return response;
+      return response.json();
     },
     post: async (path: string, data = {}) => {
       const response = await fetch(`${baseUrl}${path}`, {
@@ -30,7 +30,7 @@ const api: APIMethod = (baseUrl: string) => {
         ...options,
       });
 
-      return response;
+      return response.json();
     },
   };
 };
