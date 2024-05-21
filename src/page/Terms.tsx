@@ -109,8 +109,6 @@ const Terms = () => {
           window.location.href = redirectUri;
           return;
         }
-
-        throw new Error("로그인 페이지 이동에 실패했습니다.");
       })
       .catch((err) => {
         alert(err.message);
