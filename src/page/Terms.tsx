@@ -109,6 +109,8 @@ const Terms = () => {
           window.location.href = redirectUri;
           return;
         }
+
+        throw new Error(res.message);
       })
       .catch((err) => {
         alert(err.message);
