@@ -3,7 +3,7 @@ const privacyInformation = {
   gender: "성별",
   major: "전공",
   department: "학부",
-  username: "닉네임",
+  nickname: "닉네임",
 };
 
 const map = new Map();
