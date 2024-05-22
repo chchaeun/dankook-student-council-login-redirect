@@ -36,7 +36,7 @@ const api: APIMethod = (baseUrl: string) => {
 };
 
 const danveryApi = () => {
-  const BASE_URL = "https://next.danvery.com/api";
+  const BASE_URL = "https://danvery.com/api";
   return api(BASE_URL);
 };
 
