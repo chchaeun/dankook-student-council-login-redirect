@@ -130,7 +130,7 @@ const Terms = () => {
               type="checkbox"
               checked={totalAgree}
               onChange={totalAgreeChange}
-              tabIndex={1}
+              tabIndex={0}
             />
             {totalAgree ? (
               <CheckFilled size={22} aria-hidden />
@@ -165,7 +165,7 @@ const Terms = () => {
                 type="checkbox"
                 checked={requiredAgree}
                 onChange={requiredAgreeChange}
-                tabIndex={1}
+                tabIndex={0}
               />
               [필수] 단국대 총학생회 개인정보 제3자 제공 동의
               <br />
@@ -201,7 +201,7 @@ const Terms = () => {
                     value={oa.value}
                     checked={oa.checked}
                     onChange={optionalAgreeChange}
-                    tabIndex={1}
+                    tabIndex={0}
                   />
                   {oa.checked ? (
                     <CheckFilled size={18} aria-hidden />
@@ -288,7 +288,7 @@ const RowBetween = styled.div`
 
   a {
     text-decoration: underline;
-    color: gray;
+    color: #595959;
     cursor: pointer;
   }
 `;
